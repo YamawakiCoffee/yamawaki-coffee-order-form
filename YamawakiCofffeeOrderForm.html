@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヤマワキコーヒー注文フォーム</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Interフォントを全体に適用 */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        /* セクションの背景色 */
+        .section {
+            background-color: #f3f3f3;
+        }
+
+        /* 商品間のボーダー */
+        .product-item + .product-item {
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* バリデーションエラーメッセージ */
+        .error-message {
+            color: #dc2626; /* red-600 */
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.25rem;
+        }
+
+        /* スマホ向けレスポンシブデザイン */
+        @media (max-width: 600px) {
+            .product-layout-sm {
+                flex-direction: column; /* 画像の下に注文欄 (縦並び) */
+            }
+            .product-image-sm {
+                margin-bottom: 1rem; /* 画像と注文欄の間にスペース */
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 md:p-8">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">ヤマワキコーヒー注文フォーム</h1>
+        <p class="text-center text-gray-600 mb-8">必要事項をご入力の上、ご注文ください。</p>
+
+        <!-- 注文フォーム本体 -->
+        <form id="orderForm" class="space-y-8">
+            <!-- 基本情報入力欄 -->
+            <div class="section p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-5">1. 基本情報</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                        <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">会社名 (任意)</label>
+                        <input type="text" id="companyName" name="companyName" placeholder="例: 株式会社ヤマワキ" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="flex-1">
+                            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">姓<span class="text-red-500 ml-1">*</span></label>
+                            <input type="text" id="lastName" name="lastName" placeholder="例: 山田" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                            <div id="lastNameError" class="error-message hidden"></div>
+                        </div>
+                        <div class="flex-1">
+                            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">名<span class="text-red-500 ml-1">*</span></label>
+                            <input type="text" id="firstName" name="firstName" placeholder="例: 太郎" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                            <div id="firstNameError" class="error-message hidden"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="postalCode" class="block text-sm font-medium text-gray-700 mb-1">郵便番号<span class="text-red-500 ml-1">*</span></label>
+                        <input type="text" id="postalCode" name="postalCode" placeholder="例: 5420081 (ハイフンなし)" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                        <div id="postalCodeError" class="error-message hidden"></div>
+                    </div>
+                    <div>
+                        <label for="prefecture" class="block text-sm font-medium text-gray-700 mb-1">都道府県名<span class="text-red-500 ml-1">*</span></label>
+                        <input type="text" id="prefecture" name="prefecture" placeholder="例: 大阪府" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                        <div id="prefectureError" class="error-message hidden"></div>
+                    </div>
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1">市区町村<span class="text-red-500 ml-1">*</span></label>
+                        <input type="text" id="city" name="city" placeholder="例: 大阪市中央区" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                        <div id="cityError" class="error-message hidden"></div>
+                    </div>
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">番地<span class="text-red-500 ml-1">*</span></label>
+                        <input type="text" id="address" name="address" placeholder="例: 南船場2-8-12" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                        <div id="addressError" class="error-message hidden"></div>
+                    </div>
+                    <div>
+                        <label for="building" class="block text-sm font-medium text-gray-700 mb-1">建物名・部屋番号など (任意)</label>
+                        <input type="text" id="building" name="building" placeholder="例: ヤマワキビル1F" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">携帯電話番号<span class="text-red-500 ml-1">*</span></label>
+                        <input type="tel" id="phone" name="phone" placeholder="例: 09012345678 (ハイフンなし)" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required pattern="^\d{10,11}$">
+                        <div id="phoneError" class="error-message hidden"></div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">メールアドレス<span class="text-red-500 ml-1">*</span></label>
+                        <input type="email" id="email" name="email" placeholder="例: example@yamawakicoffee.jp" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm" required>
+                        <div id="emailError" class="error-message hidden"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 商品入力欄 -->
+            <div class="section p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-5">2. 商品選択</h2>
+                <div id="productsContainer" class="space-y-4">
+                    <!-- 商品はJavaScriptで動的に追加されます -->
+                </div>
+                <div class="flex justify-end items-center mt-6 p-4 bg-gray-100 rounded-md">
+                    <span class="text-lg font-semibold text-gray-800 mr-4">合計金額:</span>
+                    <span id="totalAmount" class="text-2xl font-bold text-blue-600">0円</span>
+                </div>
+            </div>
+
+            <!-- 備考欄 -->
+            <div class="section p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-5">3. 備考</h2>
+                <div>
+                    <label for="remarks" class="block text-sm font-medium text-gray-700 mb-1">その他ご要望など (任意)</label>
+                    <textarea id="remarks" name="remarks" rows="4" placeholder="例: 配達希望時間など" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+                注文内容を確認して送信
+            </button>
+        </form>
+
+        <!-- サンクス画面 (最初は非表示) -->
+        <div id="thanksScreen" class="hidden text-center p-8 bg-white rounded-lg shadow-lg">
+            <h3 class="text-3xl font-bold text-gray-800 mb-4">ご注文ありがとうございました!</h3>
+            <p class="text-lg text-gray-700 leading-relaxed">ご入力いただいたメールアドレス宛に、ご注文内容を送信しました。<br>1営業日〜2営業日以内に発送をいたします。</p>
+            <p style="margin-top:28px;font-size:0.97em;line-height:1.7" class="text-gray-600 text-left mx-auto max-w-sm md:max-w-md">
+                【大阪 南船場のコーヒー卸専門店 ヤマワキコーヒー】<br>
+                〒542-0081 大阪市中央区南船場2-8-12<br>
+                TEL・FAX:06-6268-5252<br>
+                E-mail:yamawakicoffee@mvb.biglobe.ne.jp<br>
+                営業時間:[平日]8:00~19:00 / [土曜日]8:00~16:00<br>
+                (定休日:日曜・第一土曜・祝日・年末年始)
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 商品データ (19種類)
+        const products = [
+            { id: 'prod01', name: '淡旨ブレンド', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1Rybs1T1rTsoBWlHLGBvNn8SSqIqXqmdP' },
+            { id: 'prod02', name: '濃旨ブレンド', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1D4wZH4w1qYBFrV2tXvfP9VUSEMwkQxtO' },
+            { id: 'prod03', name: '極旨ブレンド', price: 630, imageUrl: 'https://lh3.googleusercontent.com/d/192BF_sd_qEwd2EWR7X-6q7xJwKdej5QE' },
+            { id: 'prod04', name: 'アメリカンブレンド', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod05', name: 'アイスコーヒー', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod06', name: 'ヨーロピアンブレンド', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod07', name: 'サントスNO.2', price: 430, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod08', name: 'シダモG4', price: 480, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod09', name: 'タンザニアAA', price: 480, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod10', name: 'コスタリカナランジョ', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod11', name: 'さくらブルボン', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod12', name: 'マンデリンG1"', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod13', name: 'ペルーマチュピチュ', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod14', name: 'バリ神山', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod15', name: 'モカクィーン', price: 520, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod16', name: 'エメラルドマウンテン', price: 630, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod17', name: 'ブルマンNO.1', price: 1670, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' },
+            { id: 'prod18', name: 'ラオスゲイシャ', price: 1100, imageUrl: 'https://lh3.googleusercontent.com/d/1zmYoFXfN2I3_o8vnTn9Vbdyvdhu7vzWk' }
+        ];
+
+        const productsContainer = document.getElementById('productsContainer');
+        const totalAmountSpan = document.getElementById('totalAmount');
+        const orderForm = document.getElementById('orderForm');
+        const thanksScreen = document.getElementById('thanksScreen');
+
+        // 商品を動的にレンダリング
+        products.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product-item flex flex-col md:flex-row items-center p-4'; // レスポンシブ対応のflex
+            productDiv.innerHTML = `
+                <div class="product-image-sm flex-shrink-0 mb-4 md:mb-0 md:mr-6">
+                    <img src="${product.imageUrl}" alt="${product.name}" class="w-24 h-24 rounded-md object-cover">
+                </div>
+                <div class="flex-grow w-full md:w-auto">
+                    <h3 class="text-lg font-medium text-gray-800 mb-1">${product.name}</h3>
+                    <p class="text-gray-600 mb-2">単価: <span class="product-price" data-price="${product.price}">${product.price}</span>円/100g</p>
+                    <div class="flex items-center space-x-2">
+                        <label for="${product.id}-quantity" class="text-sm font-medium text-gray-700">数量 (100g単位):</label>
+                        <input type="number" id="${product.id}-quantity" name="quantity-${product.id}"
+                               class="quantity-input w-24 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 shadow-sm"
+                               min="0" step="100" value="0" data-product-id="${product.id}">
+                        <span class="text-gray-700">g</span>
+                    </div>
+                    <p class="text-gray-700 mt-2">小計: <span class="product-subtotal font-semibold">0</span>円</p>
+                    <div id="${product.id}-quantityError" class="error-message hidden"></div>
+                </div>
+            `;
+            productsContainer.appendChild(productDiv);
+        });
+
+        // 合計金額と小計を更新する関数
+        function updateOrderSummary() {
+            let total = 0;
+            const quantityInputs = document.querySelectorAll('.quantity-input');
+
+            quantityInputs.forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const productId = input.dataset.productId;
+                const product = products.find(p => p.id === productId);
+
+                const subtotalElement = input.closest('.flex-grow').querySelector('.product-subtotal');
+                let subtotal = 0;
+
+                if (product) {
+                    subtotal = (product.price * quantity) / 100; // 100g単位の単価なので、数量gで割る
+                    total += subtotal;
+                }
+                subtotalElement.textContent = subtotal.toLocaleString(); // 円表記でフォーマット
+            });
+
+            totalAmountSpan.textContent = total.toLocaleString() + '円'; // 円表記でフォーマット
+        }
+
+        // 数量入力フィールドのイベントリスナー
+        productsContainer.addEventListener('input', (event) => {
+            if (event.target.classList.contains('quantity-input')) {
+                updateOrderSummary();
+            }
+        });
+
+        // 初期表示時の合計金額更新
+        updateOrderSummary();
+
+        // フォーム送信時のバリデーションとGASへのデータ送信
+        orderForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // デフォルトのフォーム送信を防止
+
+            let isValid = true;
+
+            // エラーメッセージをリセット
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.classList.add('hidden');
+                el.textContent = '';
+            });
+
+            // 必須入力項目のバリデーション
+            const requiredFields = [
+                { id: 'lastName', name: '姓' },
+                { id: 'firstName', name: '名' },
+                { id: 'postalCode', name: '郵便番号' },
+                { id: 'prefecture', name: '都道府県名' },
+                { id: 'city', name: '市区町村' },
+                { id: 'address', name: '番地' },
+                { id: 'phone', name: '携帯電話番号' },
+                { id: 'email', name: 'メールアドレス' }
+            ];
+
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field.id);
+                const errorElement = document.getElementById(`${field.id}Error`);
+                if (!input.value.trim()) {
+                    errorElement.textContent = `${field.name}は必須項目です。`;
+                    errorElement.classList.remove('hidden');
+                    isValid = false;
+                }
+            });
+
+            // 携帯電話番号のバリデーション
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+            const phoneRegex = /^\d{10,11}$/;
+            if (phoneInput.value.trim() && !phoneRegex.test(phoneInput.value.trim())) {
+                phoneError.textContent = '携帯電話番号は数字のみ10桁または11桁で入力してください。';
+                phoneError.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // メールアドレスのバリデーション (ブラウザのHTML5バリデーションに任せるが、念のため)
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            if (emailInput.value.trim() && !emailInput.checkValidity()) {
+                emailError.textContent = '有効なメールアドレス形式で入力してください。';
+                emailError.classList.remove('hidden');
+                isValid = false;
+            }
+
+            // 商品数量のバリデーション
+            let atLeastOneProduct = false;
+            const orderItems = []; // 注文される商品情報を格納
+            const quantityInputs = document.querySelectorAll('.quantity-input');
+            quantityInputs.forEach(input => {
+                const quantity = parseInt(input.value) || 0;
+                const productId = input.dataset.productId;
+                const product = products.find(p => p.id === productId);
+                const quantityError = document.getElementById(`${product.id}-quantityError`);
+
+                if (quantity > 0) {
+                    if (quantity % 100 !== 0) {
+                        quantityError.textContent = '数量は100g単位で入力してください。';
+                        quantityError.classList.remove('hidden');
+                        isValid = false;
+                    } else {
+                        // 注文された商品のみ追加
+                        orderItems.push({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            quantity: quantity,
+                            subtotal: (product.price * quantity) / 100
+                        });
+                        atLeastOneProduct = true;
+                    }
+                }
+            });
+
+            if (!atLeastOneProduct && isValid) { // 他のバリデーションが通ってて商品が選択されてない場合
+                // 全体的なエラーメッセージを表示する場所が必要であれば追加
+                alert('商品を1点以上選択してください。');
+                isValid = false;
+            }
+
+
+            if (!isValid) {
+                // スクロールして最初のエラー表示まで移動 (オプション)
+                const firstError = document.querySelector('.error-message:not(.hidden)');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return; // バリデーションエラーがあればここで終了
+            }
+
+            // 全てのバリデーションが成功したらデータを収集
+            const formData = {
+                companyName: document.getElementById('companyName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                firstName: document.getElementById('firstName').value.trim(),
+                postalCode: document.getElementById('postalCode').value.trim(),
+                prefecture: document.getElementById('prefecture').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                address: document.getElementById('address').value.trim(),
+                building: document.getElementById('building').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                orderItems: orderItems, // 数量が0のものは含まれない
+                remarks: document.getElementById('remarks').value.trim(),
+                totalAmount: parseInt(totalAmountSpan.textContent.replace(/[円,]/g, '')) // "1,234円" -> 1234
+            };
+
+            console.log('送信データ:', formData);
+
+            // ここからGASへのデータ送信処理
+            // GASのWebアプリのURLに置き換えてください
+            const gasWebAppUrl = 'https://script.google.com/macros/s/AKfycbxRXMEua7bdOC95iq0z-Jvl-K50bohtAMX6pAtweEvZe5zhCRlaKGIPzi7E160bYQwN/exec'; // 例: 'https://script.google.com/macros/s/AKfycbz_YOUR_DEPLOYMENT_ID/exec';
+
+            try {
+                // フェッチリクエストを送信
+                 await fetch(gasWebAppUrl, {
+                     method: 'POST',
+                     mode: 'no-cors', // GASとの連携ではno-corsが必要な場合が多い
+                     headers: {
+                         'Content-Type': 'application/json',
+                     },
+                     body: JSON.stringify(formData),
+                 });
+
+                // 成功したらサンクス画面を表示
+                orderForm.classList.add('hidden');
+                thanksScreen.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // ページトップへスクロール
+                
+                // 実際には上記のfetchをコメント解除して使用します。
+                // ここではデモとして即座にサンクス画面を表示します。
+                console.log('フォームが正常に送信されました (GAS連携はシミュレーション)。');
+
+            } catch (error) {
+                console.error('フォーム送信エラー:', error);
+                // エラーメッセージをユーザーに表示
+                alert('注文の送信中にエラーが発生しました。もう一度お試しください。');
+            }
+        });
+    </script>
+</body>
+</html>
+
